@@ -1,3 +1,8 @@
+PREMDICTION by:
+Gary Bennet
+Puntus Brusewitz
+Walid Soboh
+
 summary of the project:
 
 This project involves creating a simple RESTful Flask API application named 'PREMDIKTION'. The purpose of this application is to allow users to make predictions on the outcome of Premier League football matches.
