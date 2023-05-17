@@ -5,9 +5,9 @@ Walid Soboh
 
 
 
-This project involves creating a simple RESTful Flask API application named 'PREMDIKTION'. The purpose of this application is to allow users to make predictions on the outcome of Premier League football matches.
+This project involves creating a simple RESTful Flask API application named 'PREMDICTION'. The purpose of this application is to allow users to make predictions on the outcome of Premier League football matches.
 
-# Premdiktion - The Premier League Prediction App
+# Premdiction - The Premier League Prediction App
 
 ## Getting Started
 
@@ -28,7 +28,7 @@ The following tools need to be installed on your machine:
 1. Clone the repository:
 
     git clone https://github.com/yourusername/premdiction.git
-    cd premdiktion
+    cd premdiction
 
 2. Create a virtual environment and activate it:
 
