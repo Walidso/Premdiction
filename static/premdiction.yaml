@@ -3,6 +3,13 @@ info:
   version: 1.0.0
   title: Premdiction... the Premier League Prediction App
 paths:
+  /:
+    get:
+      summary: Home page.
+      responses:
+        '200':
+          description: Welcome message.
+
   /register:
     post:
       summary: Registers a new user.
@@ -15,6 +22,8 @@ paths:
       responses:
         '200':
           description: New user registered.
+        '400':
+          description: Bad request.
 
   /login:
     post:
@@ -28,6 +37,8 @@ paths:
       responses:
         '200':
           description: User logged in successfully.
+        '400':
+          description: Bad request.
         '401':
           description: Login failed.
 
@@ -43,6 +54,8 @@ paths:
       responses:
         '200':
           description: Prediction created.
+        '400':
+          description: Bad request.
     get:
       summary: Gets all predictions.
       responses:
@@ -67,6 +80,40 @@ paths:
       responses:
         '200':
           description: Prediction updated.
+        '400':
+          description: Bad request.
+    delete:
+      summary: Deletes a prediction.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Prediction deleted.
+
+  /matches/{id}:
+    put:
+      summary: Updates a match.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Match'
+      responses:
+        '200':
+          description: Match updated.
+        '400':
+          description: Bad request.
 
   /users/high_scores:
     get:
@@ -88,24 +135,12 @@ paths:
         '200':
           description: User information.
 
-  /matches/{id}:
-    put:
-      summary: Updates a match.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Match'
+  /matches:
+    get:
+      summary: Retrieves all matches.
       responses:
         '200':
-          description: Match updated.
+          description: Lists all matches.
 
   /teams:
     get:
@@ -125,29 +160,32 @@ paths:
             type: integer
       responses:
         '200':
-          description: Lists all players in the team.
+          description: Lists all players in a team.
 
-  /matches/finished:
+  /players:
     get:
-      summary: Retrieves all finished matches.
+      summary: Retrieves all players.
       responses:
         '200':
-          description: Lists all finished matches.
+          description: Lists all players.
 
-  /matches/upcoming:
+  /players/{id}:
     get:
-      summary: Retrieves all upcoming matches.
+      summary: Retrieves a specific player.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
-          description: Lists all upcoming matches.
+          description: Player information.
 
 components:
   schemas:
     Register:
       type: object
-      required:
-        - username
-        - password
       properties:
         username:
           type: string
@@ -156,9 +194,6 @@ components:
 
     Login:
       type: object
-      required:
-        - username
-        - password
       properties:
         username:
           type: string
@@ -167,59 +202,26 @@ components:
 
     Prediction:
       type: object
-      required:
-        - user_id
-        - match_id
-        - result
       properties:
         user_id:
-          type: integer
+          type: string
         match_id:
-          type: integer
+          type: string
         result:
           type: string
 
     Match:
       type: object
-      required:
-        - home_team
-        - away_team
-        - date
       properties:
-        home_team:
-          type: string
-        away_team:
-          type: string
+        home_team_id:
+          type: integer
+        away_team_id:
+          type: integer
+        home_score:
+          type: integer
+        away_score:
+          type: integer
         date:
           type: string
-        result:
-          type: string
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-        username:
-          type: string
-        score:
-          type: integer
+          format: date-time
 
-    Team:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        players:
-          type: array
-          items:
-            $ref: '#/components/schemas/Player'
-
-    Player:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
