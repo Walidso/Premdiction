@@ -3,28 +3,96 @@ Gary Bennet
 Puntus Brusewitz
 Walid Soboh
 
-summary of the project:
+
 
 This project involves creating a simple RESTful Flask API application named 'PREMDIKTION'. The purpose of this application is to allow users to make predictions on the outcome of Premier League football matches.
 
-The basic functionalities of this app include:
+# Premdiktion - The Premier League Prediction App
 
-1. User Registration and Login: Users can register with a username and password. Passwords are hashed for security purposes.
+## Getting Started
 
-2. Making Predictions: Once registered, users can make predictions on the outcome of Premier League matches. The outcomes can be '1' (team1 wins), 'X' (draw), or '2' (team2 wins). These predictions are stored in a SQLite database.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-3. Updating Match Results and Scores: The app fetches real match data from the external football-data.org API. Once a match is over, its result can be updated in the app. If a user's prediction matches the actual result, their score is incremented.
 
-4. Viewing Predictions and High Scores: Users can view all predictions made and the current high scores.
+## Prerequisites
 
-The app provides a variety of endpoints for these functionalities, including endpoints for registration (`/register`), login (`/login`), creating predictions (`/predictions`), updating match results (`/matches/<id>`), viewing high scores (`/users/high_scores`), and more.
+The following tools need to be installed on your machine:
 
-To interact with the app, you can use an HTTP client like Postman. You can send HTTP requests to the provided endpoints to perform the various operations. For example, you can send a POST request with a JSON body to the `/register` endpoint to register a new user.
+- Python 3.8 or higher
+- pip
+- virtualenv
 
-The app is designed to be simple, focusing primarily on backend functionalities and providing responses in JSON format. It doesn't involve any frontend HTML or CSS elements, as it's meant to be tested and interacted with using Postman or a similar tool.
 
-The code for the app is split into two main Python files: `app.py`, which contains the Flask app and route definitions, and `models.py`, which defines the SQLAlchemy database models. The app uses the Flask-SQLAlchemy extension for ORM functionalities.
+## Installing
 
-The project also involves creating a Swagger YAML documentation for the API, which provides a detailed description of all the app's endpoints and can be used to generate a user-friendly API documentation.
+1. Clone the repository:
 
-Overall, this project provides an example of how to develop a simple yet functional RESTful API with Flask, integrate it with an external API, and use SQLAlchemy for database operations.
+    git clone https://github.com/yourusername/premdiktion.git
+    cd premdiktion
+
+2. Create a virtual environment and activate it:
+
+    python3 -m venv .venv
+    source .venv/bin/activate
+
+3. Install the required Python packages:
+
+    pip install -r requirements.txt
+  
+4. Initialize the SQLite database:
+first of all you have to change the path to the database.db filen in app.py to the actuall path where you keep the database file  : app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///............write your path here.......\\instance\\database.db'
+now we can start initialising the database:
+
+you can use those commandos:
+
+    python (or python3 depends on what you have)
+    from app import db
+    db.create_all()
+    exit()
+
+
+## External API Setup
+
+The application uses the [Football Data API](https://www.football-data.org/) to fetch match data. Here are the steps to use it:
+
+1. Visit [Football Data API](https://www.football-data.org/) and register for a free account.
+
+2. Once registered, you will receive an API Key. Store it safely.
+
+3. In your local project, you need to set this API Key in the environment variables. The key is named `API_KEY`:  Create a file and name it .env and you should have this line in it:
+API_KEY="your-api-key"
+Replace `<your-api-key>` with the actual key you received upon registration.
+
+4. The app fetches data from the Football Data API by making requests to the specific endpoints. You can use it for endpoints used in this app like `/teams` and `/matches`. The data from these endpoints are used to power the match predictions feature.
+
+5. The API rate limits free tier users to a certain number of requests per minute. If you exceed this limit, you may need to wait for a bit before you can make more requests.
+
+6. If you encounter any issues, please refer to the Football Data API documentation or contact their support.
+
+Now, when you run your app, it will use the Football Data API to fetch Premier League match data.
+
+
+## Running the App
+
+To run the app:
+
+1. Make sure you're in the project directory and the virtual environment is activated.
+
+2. Run the Flask app:
+
+    python app.py
+
+The app should now be running at [http://localhost:5000].
+
+## API Documentation
+
+The API documentation for the project is described using the OpenAPI Specification (Swagger). The documentation includes all the details of the API's endpoints, request/response types, and status codes.
+
+You can view the Swagger documentation by navigating to [http://localhost:5000/api/docs] in your browser.
+
+## Built With
+
+- [Flask](https://flask.palletsprojects.com/) - The web framework used
+- [SQLAlchemy](https://www.sqlalchemy.org/) - SQL Toolkit and ORM
+- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/) - Adds SQLAlchemy support to Flask
+
