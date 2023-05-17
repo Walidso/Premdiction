@@ -27,7 +27,7 @@ The following tools need to be installed on your machine:
 
 1. Clone the repository:
 
-    git clone https://github.com/yourusername/premdiktion.git
+    git clone https://github.com/yourusername/premdiction.git
     cd premdiktion
 
 2. Create a virtual environment and activate it:
@@ -40,12 +40,12 @@ The following tools need to be installed on your machine:
     pip install -r requirements.txt
   
 4. Initialize the SQLite database:
-first of all you have to change the path to the database.db filen in app.py to the actuall path where you keep the database file  : app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///............write your path here.......\\instance\\database.db'
+first of all you have to change the path to the database.db file in app.py to the actuall path where you keep the database file  : app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///............write the path for database.db here.......\\instance\\database.db'
 now we can start initialising the database:
 
 you can use those commandos:
 
-    python (or python3 depends on what you have)
+    python (or python3 depends on what version you have)
     from app import db
     db.create_all()
     exit()
@@ -90,9 +90,4 @@ The API documentation for the project is described using the OpenAPI Specificati
 
 You can view the Swagger documentation by navigating to [http://localhost:5000/api/docs] in your browser.
 
-## Built With
-
-- [Flask](https://flask.palletsprojects.com/) - The web framework used
-- [SQLAlchemy](https://www.sqlalchemy.org/) - SQL Toolkit and ORM
-- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/) - Adds SQLAlchemy support to Flask
 
