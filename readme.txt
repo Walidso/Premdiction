@@ -1,6 +1,6 @@
 PREMDICTION by:
 Gary Bennet
-Puntus Brusewitz
+Pontus Brusewitz
 Walid Soboh
 
 
