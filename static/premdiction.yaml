@@ -1,227 +1,586 @@
-openapi: "3.0.0"
+openapi: 3.0.3
+x-stoplight:
+  id: kpmgf9tceuwep
 info:
-  version: 1.0.0
-  title: Premdiction... the Premier League Prediction App
+  title: Premdiction
+  version: '1.0'
+  description: An API to talk to an external football API & our Database
+  contact:
+    name: Admin
+    url: example.com
+    email: example@gmail.com
+  termsOfService: example.com/ToS
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSES-2.0'
+servers:
+  - url: 'http://localhost:5000/premdiction'
 paths:
   /:
     get:
-      summary: Home page.
+      summary: ''
+      tags:
+        - home
       responses:
         '200':
-          description: Welcome message.
-
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                Example 1:
+                  value: PREMDIKTION your premier league prediction app
+        '400':
+          description: Bad Request
+      operationId: get-home
+      description: Welcomepage
+    parameters: []
   /register:
     post:
-      summary: Registers a new user.
+      summary: ''
+      operationId: post-register
+      responses:
+        '201':
+          description: User registerd
+          headers: {}
+          content: {}
+        '400':
+          description: Bad Request
+        '401':
+          description: 'Loggin failed, Wrong password or username '
+          content: {}
+      description: Register a new user
+      tags:
+        - user
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Register'
-      responses:
-        '200':
-          description: New user registered.
-        '400':
-          description: Bad request.
-
+              $ref: '#/components/schemas/User'
+            examples:
+              Example 1:
+                value:
+                  id: 2
+                  username: testuser1
+                  password: '1337'
+                  score: 0
   /login:
     post:
-      summary: Logs in a user.
+      summary: Login
+      operationId: post-user
+      responses:
+        '200':
+          description: Succesfully logged in!
+        '400':
+          description: |-
+            Bad requests, 
+            Wrong format of password or username, or the user exists already
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Login'
-      responses:
-        '200':
-          description: User logged in successfully.
-        '400':
-          description: Bad request.
-        '401':
-          description: Login failed.
-
-  /predictions:
-    post:
-      summary: Creates a new prediction.
-      requestBody:
+              $ref: '#/components/schemas/User'
+            examples:
+              Example 2:
+                value:
+                  id: 5
+                  username: Ponty
+                  password: '666'
+                  score: 0
+        description: Post the necessary fields for the API to create a new user.
+      description: 'Login the user and authorize the session '
+      tags:
+        - user
+    parameters: []
+  '/users/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        description: id of the user
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Prediction'
-      responses:
-        '200':
-          description: Prediction created.
-        '400':
-          description: Bad request.
     get:
-      summary: Gets all predictions.
+      summary: ''
+      tags:
+        - user
       responses:
         '200':
-          description: Lists all predictions.
-
-  /predictions/{id}:
-    put:
-      summary: Updates a prediction.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Prediction'
-      responses:
-        '200':
-          description: Prediction updated.
+          description: Details retrived
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              examples:
+                Example 1:
+                  value:
+                    - id: 3
+                      username: Gari
+                      password: '1789'
+                      score: 0
         '400':
-          description: Bad request.
-    delete:
-      summary: Deletes a prediction.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Prediction deleted.
-
-  /matches/{id}:
-    put:
-      summary: Updates a match.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Match'
-      responses:
-        '200':
-          description: Match updated.
-        '400':
-          description: Bad request.
-
+          description: Bad Request
+      operationId: get-users-id
+      description: Get user details of current  user
   /users/high_scores:
     get:
-      summary: Retrieves the highest scores.
+      summary: ''
+      tags:
+        - user
       responses:
         '200':
-          description: Lists users with the highest scores.
-
-  /users/{id}:
+          description: Highscore-list retrived
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User_highscore'
+              examples:
+                Example 1:
+                  value:
+                    username: Walle
+                    score: 6
+        '400':
+          description: Bad Request
+      operationId: get-users-high_scores
+      description: Get the highscore-list of the users
+  /predictions:
     get:
-      summary: Retrieves information about a specific user.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
+      summary: ''
+      operationId: get-predictions
       responses:
         '200':
-          description: User information.
-
+          description: Predictions retrived
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/prediction'
+              examples:
+                Example 1:
+                  value:
+                    - prediction_id: 665
+                      user_id: 55
+                      match_id: 65
+                      result: '1'
+        '400':
+          description: Bad Request
+      description: Get all the users predictions
+      tags:
+        - predictions
+  '/predictions/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        description: id of the prediction
+        required: true
+    put:
+      summary: ''
+      operationId: put-predictions-id
+      responses:
+        '200':
+          description: predictions uppdated
+        '400':
+          description: Bad Request
+      description: Update a prediction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/prediction'
+            examples:
+              Example 1:
+                value:
+                  prediction_id: 2
+                  user_id: 6
+                  match_id: 12
+                  result: X
+      tags:
+        - predictions
+    delete:
+      summary: ''
+      operationId: delete-predictions-id
+      responses:
+        '200':
+          description: Prediction deleted
+        '204':
+          description: Prediction not found
+        '400':
+          description: Bad Request
+      description: Delete a prediction
+      tags:
+        - predictions
   /matches:
     get:
-      summary: Retrieves all matches.
+      summary: matches
+      tags:
+        - result
       responses:
         '200':
-          description: Lists all matches.
-
+          description: List all premier league matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/result'
+              examples:
+                Example 1:
+                  value:
+                    - game_id: 5
+                      home team: Everton FC
+                      away team: Liverpool FC
+                      result: 3-1
+        '400':
+          description: 'Bad Request, invalid data. e.g. user hasn''t made a prediction'
+      operationId: get-result
+      description: Retrive all the Premier League matches.
+    parameters: []
+  /matches/completed:
+    get:
+      summary: ''
+      tags:
+        - result
+      responses:
+        '200':
+          description: Completed premmier league matches retived
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/result'
+              examples:
+                Example 1:
+                  value:
+                    - game_id: 32
+                      home team: Brighton & Hove Albion FC
+                      away team: Wolverhampton Wanderers FC
+                      result: 3-1
+        '400':
+          description: 'Bad Request, coudn''t retrive the completed premmier league matches'
+      operationId: get-matches-completed
+      description: Get all the completed Premier League matches
+  /matches/upcoming:
+    get:
+      summary: ''
+      tags:
+        - result
+      responses:
+        '200':
+          description: Upcomming premier league matches retrived
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/result'
+              examples:
+                Example 1:
+                  value:
+                    - game_id: 2
+                      home team: Southampton FC
+                      away team: Newcastle United FC
+                      result: none
+        '400':
+          description: Bad Request
+      operationId: get-matches-upcoming
+      description: Retrive the upcomming Premier League matches
+  '/matches/{id}/details':
+    get:
+      summary: ''
+      tags:
+        - result
+      responses:
+        '200':
+          description: Match details retrived
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/result'
+              examples:
+                Example 1:
+                  value:
+                    game_id: 3
+                    home team: Everton FC
+                    away team: Southampton FC
+                    result: 1-0
+        '400':
+          description: Bad Request
+      operationId: get-matches-id-details
+      description: Get all the details of a specific match
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        description: id of the game
+        required: true
+  '/matches/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        description: id of the match
+        required: true
+    put:
+      summary: ''
+      operationId: put-matches-id
+      responses:
+        '200':
+          description: Match updated
+        '400':
+          description: Bad Request
+      description: Used to uppdate a game in our DB
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/result'
+            examples:
+              Example 1:
+                value:
+                  game_id: 13
+                  home team: Chealse FC
+                  away team: Everton FC
+                  result: 1-2
+      tags:
+        - result
   /teams:
     get:
-      summary: Retrieves all teams.
+      summary: ''
+      tags:
+        - teams
       responses:
         '200':
-          description: Lists all teams.
-
-  /teams/{id}/players:
+          description: Premier league teams retrived
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/team'
+              examples:
+                Example 1:
+                  value:
+                    - team_id: 5
+                      team_name: Chealse FC
+        '400':
+          description: Bad Request
+      operationId: get-teams
+      description: Get all the Premier League teams
+  '/teams/{id}/players':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        description: id of the team
+        required: true
     get:
-      summary: Retrieves all players in a team.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
+      summary: ''
+      tags:
+        - teams
       responses:
         '200':
-          description: Lists all players in a team.
-
-  /players:
-    get:
-      summary: Retrieves all players.
-      responses:
-        '200':
-          description: Lists all players.
-
-  /players/{id}:
-    get:
-      summary: Retrieves a specific player.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Player information.
-
+          description: Players retrived
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/players'
+              examples:
+                Example 1:
+                  value:
+                    - name: Mohamed Salah
+                      position: attacker
+        '400':
+          description: Bad Request
+      operationId: get-teams-id-players
+      description: Retrive all players from a Premier League team
 components:
   schemas:
-    Register:
+    User:
+      title: User
+      x-stoplight:
+        id: rwadi34y3bwaf
       type: object
+      x-tags:
+        - user
       properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: sy8zod95gffg9
         username:
           type: string
+          x-stoplight:
+            id: qhu6gp7wnorfa
+          description: Username should be unique and be between 4 & 20 characters
         password:
           type: string
-
-    Login:
+          x-stoplight:
+            id: b5sv58jb5ftbn
+          description: Password
+        score:
+          type: integer
+          x-stoplight:
+            id: ir2n8ed743zk2
+          description: 'Score of the user, it starts on "0"'
+      required:
+        - id
+        - username
+        - password
+      x-examples:
+        Example 1:
+          id: 5
+          username: Walle
+          password: '1337'
+          score: 0
+    prediction:
+      title: prediction
+      x-stoplight:
+        id: ytputzogwqun0
       type: object
+      x-tags:
+        - prediction
       properties:
-        username:
-          type: string
-        password:
-          type: string
-
-    Prediction:
-      type: object
-      properties:
+        prediction_id:
+          type: integer
+          x-stoplight:
+            id: udgdmqv2lz60b
         user_id:
-          type: string
+          type: integer
+          x-stoplight:
+            id: toxy5zqehvznq
+          description: user id
         match_id:
-          type: string
+          type: integer
+          x-stoplight:
+            id: y8mgyckvob36z
+          description: id of the match
         result:
           type: string
-
-    Match:
+          x-stoplight:
+            id: kbpnnohwerfm7
+          description: prediction of the game
+      required:
+        - prediction_id
+        - user_id
+        - match_id
+        - result
+    result:
+      title: result
+      x-stoplight:
+        id: 4ft014jttj7ey
+      type: object
+      x-tags:
+        - result
+      x-examples:
+        Example 1:
+          game_id: 555
+          date: '2023-05-17'
+          home team: Manchester City
+          away team: Manchester United
+          winning team: home team
+      properties:
+        game_id:
+          type: integer
+          x-stoplight:
+            id: zd0bdkextg6iq
+        home team:
+          type: string
+          x-stoplight:
+            id: 1ho1zy1u4p5p7
+        away team:
+          type: string
+          x-stoplight:
+            id: qn3qr8260uzka
+        result:
+          type: string
+          x-stoplight:
+            id: si0dm1bxbyh62
+      required:
+        - game_id
+        - home team
+        - away team
+        - result
+    User_highscore:
+      title: User_highscore
+      x-stoplight:
+        id: d77fhwb7a6kys
       type: object
       properties:
-        home_team_id:
-          type: integer
-        away_team_id:
-          type: integer
-        home_score:
-          type: integer
-        away_score:
-          type: integer
-        date:
+        username:
           type: string
-          format: date-time
-
+          x-stoplight:
+            id: 6gulya5x2cv1d
+        score:
+          type: integer
+          x-stoplight:
+            id: 86qg36wqhehhp
+      x-examples:
+        Example 1:
+          username: Walle
+          score: 5
+    team:
+      title: team
+      x-stoplight:
+        id: ef8dr5ni6f47v
+      type: object
+      properties:
+        team_id:
+          type: integer
+          x-stoplight:
+            id: szxqybv9435p1
+        team_name:
+          type: string
+          x-stoplight:
+            id: nkktxftpjbron
+      x-examples:
+        Example 1:
+          team_id: 5
+          team_name: Chealse FC
+      x-tags:
+        - teams
+      description: Teams
+    players:
+      title: players
+      x-stoplight:
+        id: gtj8nh7605utg
+      type: object
+      description: Players of premier league teams
+      properties:
+        name:
+          type: string
+          x-stoplight:
+            id: mmk4uwcmxcocl
+        position:
+          type: string
+          x-stoplight:
+            id: 2auq4xdihne55
+      x-examples:
+        Example 1:
+          name: Harry Maguire
+          position: Defender
+      x-tags:
+        - teams
+tags:
+  - name: home
+    description: homepage
+  - name: predictions
+    description: predictions done by the users
+  - name: result
+    description: results of the games
+  - name: user
+    description: login related
+  - name: teams
+    description: team related
